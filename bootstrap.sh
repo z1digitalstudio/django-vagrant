@@ -82,8 +82,3 @@ sed -i.bak "s/^bind 127.0.0.1$/# bind 127.0.0.1/" /etc/redis/redis.conf
 sed -i.bak "s/^port 6379$/# port 6379/" /etc/redis/redis.conf
 
 service redis-server restart
-
-pgadmin3 : Depends: libgcrypt11 (>= 1.5.1) but it is not installable
-    default:             Depends: libwxbase3.0-0 (>= 3.0.0) but it is not installable
-    default:             Depends: libwxgtk3.0-0 (>= 3.0.0) but it is not installable
-    default:             Recommends: pgagent but it is not going to be installed
