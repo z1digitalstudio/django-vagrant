@@ -15,17 +15,16 @@ sudo apt-get -y install redis-server
 sudo apt-get -y install git
 
 # YOU CAN UNCOMMENT NEXT LINES TO USE NODEJS
-# curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
-# apt-get -y install nodejs
-
-# sudo ln -s /usr/bin/nodejs /usr/sbin/node
-# apt-get -y install npm
+    # curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+    # apt-get -y install nodejs
+    # sudo ln -s /usr/bin/nodejs /usr/sbin/node
+    # apt-get -y install npm
 
 sudo apt-get -y install python3-pip
 
 # Yarn
-# curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-# echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+    # curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    # echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 
 # Postgresql 9.4
 
