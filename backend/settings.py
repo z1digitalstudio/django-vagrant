@@ -11,6 +11,13 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from os.path import join, dirname
+from dotenv import load_dotenv
+
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+
+
 # from celery.schedules import crontab
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -21,31 +28,27 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '12b06mtny_e^*(*7&3wy14i26jk=71azifld4+ky_wdsu%qx6m'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('ENV', 'dev') == 'dev'
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1'
-]
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(':') if os.getenv('ALLOWED_HOSTS') else None
 
-INTERNAL_IPS = (
-    '127.0.0.1',
-    '10.0.2.2',  # Vagrant
-)
+INTERNAL_IPS = os.getenv('INTERNAL_IPS').split(':') if os.getenv('INTERNAL_IPS') else None
 
 # Application definition
 
 INSTALLED_APPS = [
+    'django_su',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'drf_yasg'
+    'drf_yasg',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +61,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'urls.main'
 
 TEMPLATES = [
     {
@@ -84,15 +87,14 @@ WSGI_APPLICATION = 'wsgi.application'
 
 DATABASES = {
     'default': {
-        'NAME': 'django_db',
-        'USER': 'django',
+        'NAME': os.getenv('DATABASE_NAME'),
+        'USER': os.getenv('DATABASE_USER'),
         'ENGINE': 'django.db.backends.postgresql',
-        'PASSWORD': 'django',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': os.getenv('DATABASE_HOST'),
+        'PORT': os.getenv('DATABASE_PORT'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -114,7 +116,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Auth User Model
-# AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = 'users.User'
+
+AUTHENTICATION_BACKENDS = (
+    u'django.contrib.auth.backends.ModelBackend',
+    u'django_su.backends.SuBackend',
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -146,3 +153,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
 CELERY_TIMEZONE = 'US/Eastern'
 CELERYD_TASK_TIME_LIMIT = 700
 CELERYBEAT_SCHEDULE = {}
+
