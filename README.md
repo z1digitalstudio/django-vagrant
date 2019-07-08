@@ -10,9 +10,13 @@
     $ git clone https://github.com/z1digitalstudio/django-vagrant
     $ cd django-vagrant
     $ vagrant up --provision
-     
- ## Start up 
-
+ 
+ ## Development
+ ### Create user
+     $ python manage.py createsuperuser
+ ### Create database tables
+     $ python manage.py migrate
+ ### Start up 
     $ vagrant ssh
     $ ./run.sh
 
