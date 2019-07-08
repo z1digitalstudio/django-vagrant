@@ -13,11 +13,11 @@
  
  ## Development
  ### Create user
+     $ vagrant ssh
      $ python manage.py createsuperuser
  ### Create database tables
      $ python manage.py migrate
  ### Start up 
-    $ vagrant ssh
     $ ./run.sh
 
 ## Access from the browser
