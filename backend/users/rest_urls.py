@@ -1,16 +1,16 @@
-from django.conf.urls import url
+from django.urls import path
 
-from users.rest_views import (
+from .rest_views import (
     EditProfileRestView, ChangePasswordRestView
 )
 
 urlpatterns = [
-    url(
-        r'^password/$',
+    path(
+        r'password/',
         ChangePasswordRestView.as_view(),
         name="change_password"),
-    url(
-        r'^profile/$',
+    path(
+        r'profile/',
         EditProfileRestView.as_view(),
         name="edit_profile")
 ]
