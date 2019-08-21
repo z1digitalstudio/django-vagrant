@@ -41,8 +41,8 @@ echo "host all all 127.0.0.1/32 md5" >> /etc/postgresql/9.4/main/pg_hba.conf
 echo "host all all ::1/128 md5" >> /etc/postgresql/9.4/main/pg_hba.conf
 
 service postgresql restart
-echo $DATABASE_PASSWORD
-sudo -u postgres bash -c "psql -c \"CREATE USER $DATABASE_USER WITH PASSWORD '$DATABASE_PASSWORD';\""
+
+sudo -u postgres bash -c "psql -c \"CREATE USER django WITH PASSWORD 'django';\""
 sudo -u postgres createdb --owner=django --encoding=UTF8 django_db
 
 # Virtualenv
