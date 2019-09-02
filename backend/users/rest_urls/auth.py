@@ -13,7 +13,7 @@ urlpatterns = [
          name="change_password"),
     path("reset-password/", ResetPasswordRestView.as_view(),
          name="reset_password"),
-    path("confirm-password/", ConfirmResetPasswordView.as_view(),
+    path("confirm-password/<str:token>/"", ConfirmResetPasswordView.as_view(),
          name="confirm_password"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("token/verify/", TokenVerifyView.as_view(), name="token_verify"),
