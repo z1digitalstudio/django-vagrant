@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
+from datetime import timedelta
 
 
 # from celery.schedules import crontab
@@ -21,7 +22,6 @@ from dotenv import load_dotenv
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 dotenv_path = join(BASE_DIR, '.env')
 load_dotenv(dotenv_path)
-
 
 
 # Quick-start development settings - unsuitable for production
@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'drf_yasg',
     'users.apps.UsersConfig',
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -122,6 +124,19 @@ AUTHENTICATION_BACKENDS = (
     u'django_su.backends.SuBackend',
 )
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 100
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -135,7 +150,12 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+SWAGGER_SETTINGS = {
+    "DEFAULT_INFO": "urls.main.django_vagrant",
+    "SECURITY_DEFINITIONS": {
+        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
+    },
+}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -152,4 +172,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
 CELERY_TIMEZONE = 'US/Eastern'
 CELERYD_TASK_TIME_LIMIT = 700
 CELERYBEAT_SCHEDULE = {}
-
