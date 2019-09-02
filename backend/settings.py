@@ -150,7 +150,12 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+SWAGGER_SETTINGS = {
+    "DEFAULT_INFO": "urls.main.django_vagrant",
+    "SECURITY_DEFINITIONS": {
+        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
+    },
+}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 

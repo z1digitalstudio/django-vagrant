@@ -6,27 +6,23 @@ from users.models import User
 
 class UserProfileSerializer(serializers.ModelSerializer):
 
-    def update(self, instance, validated_data):
-        password = validated_data.pop('password')
-        user = super(UserProfileSerializer, self).update(instance, validated_data)
-        if password:
-            user.set_password(password)
+    def create(self, validated_data):
+        user = User(
+            email=validated_data['email'])
+        user.set_password(validated_data['password'])
         user.save()
         return user
 
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'location', 'avatar')
+        fields = ('id', 'first_name', 'last_name', 'email', 'location', 'avatar')
+        extra_kwargs = {'password': {'write_only': True}}
 
 
 class ChangePasswordSerializer(serializers.Serializer):
     """
     Serializer for password change endpoint.
     """
-
-    def update(self, instance, validated_data):
-        pass
-
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
 
