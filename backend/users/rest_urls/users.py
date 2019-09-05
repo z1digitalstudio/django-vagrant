@@ -8,6 +8,8 @@ from users.rest_views import (
 
 urlpatterns = [
     path("", UserListRestView.as_view(), name="list_users"),
-    path("<uuid:pk>/", UserRetrieveUpdateRestView.as_view(), name="get_profile"),
+    path(
+        "<uuid:pk>/", UserRetrieveUpdateRestView.as_view(), name="get_profile"
+    ),
     path("me/", UserMeRetrieveRestView.as_view(), name="me"),
 ]

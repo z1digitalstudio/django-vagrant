@@ -26,7 +26,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     last_name = models.CharField(verbose_name=_("last name"), max_length=30)
 
-    email = models.EmailField(verbose_name=_("email address"), null=True, unique=True)
+    email = models.EmailField(
+        verbose_name=_("email address"), null=True, unique=True
+    )
 
     email_confirmed = models.BooleanField(
         verbose_name=_("email confirmed"), default=False
@@ -35,7 +37,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(
         verbose_name=_("staff status"),
         default=True,
-        help_text=_("Designates whether the user " "can log into this admin site."),
+        help_text=_(
+            "Designates whether the user " "can log into this admin site."
+        ),
     )
 
     is_active = models.BooleanField(
@@ -51,7 +55,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name=_("date joined"), default=timezone.now
     )
 
-    location = models.CharField(verbose_name=_("location"), max_length=255, blank=True)
+    location = models.CharField(
+        verbose_name=_("location"), max_length=255, blank=True
+    )
 
     company_name = models.CharField(
         verbose_name=_("company name"), max_length=255, blank=True

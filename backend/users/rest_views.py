@@ -63,7 +63,9 @@ class ChangePasswordRestView(api_views.UpdateAPIView):
         self.object = self.get_object()
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            if not self.object.check_password(serializer.data.get("old_password")):
+            if not self.object.check_password(
+                serializer.data.get("old_password")
+            ):
                 return Response(
                     {"old_password": ["Wrong password."]},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -90,7 +92,9 @@ class ResetPasswordRestView(api_views.GenericAPIView):
             past = now + datetime.timedelta(hours=10)
 
             encoded_token = jwt.encode(
-                {"user_id": str(user.id), "exp": past}, "secret", algorithm="HS256"
+                {"user_id": str(user.id), "exp": past},
+                "secret",
+                algorithm="HS256",
             )
 
             url = "%s/reset-password/%s" % (
@@ -105,14 +109,20 @@ class ResetPasswordRestView(api_views.GenericAPIView):
             print(message)
             try:
                 send_mail(
-                    subject, message, "z1@z1.digital", [email], fail_silently=False
+                    subject,
+                    message,
+                    "z1@z1.digital",
+                    [email],
+                    fail_silently=False,
                 )
             except BadHeaderError:
                 return HttpResponse("Invalid header found.")
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except User.DoesNotExist:
-            return Response("The user does not exist", status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                "The user does not exist", status=status.HTTP_403_FORBIDDEN
+            )
 
 
 class ConfirmResetPasswordView(api_views.UpdateAPIView):
@@ -126,7 +136,9 @@ class ConfirmResetPasswordView(api_views.UpdateAPIView):
         try:
             user = User.objects.get(id=self.decoded_token["user_id"])
         except User.DoesNotExist:
-            return self.permission_denied(self.request, "The user does not exist")
+            return self.permission_denied(
+                self.request, "The user does not exist"
+            )
         return user
 
     def get_object(self, *args, **kwargs):
@@ -151,7 +163,9 @@ class ConfirmResetPasswordView(api_views.UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         self.check_permission(request)
-        return super(ConfirmResetPasswordView, self).update(request, *args, **kwargs)
+        return super(ConfirmResetPasswordView, self).update(
+            request, *args, **kwargs
+        )
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):

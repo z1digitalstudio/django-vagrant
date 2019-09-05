@@ -13,7 +13,14 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id", "first_name", "last_name", "email", "location", "avatar")
+        fields = (
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "location",
+            "avatar",
+        )
         extra_kwargs = {"password": {"write_only": True}}
 
 
@@ -36,7 +43,9 @@ class ResetPasswordSerializer(serializers.Serializer):
 
     def validate(self, data):
         if data.get("password") != data.get("repeat_password"):
-            raise serializers.ValidationError({"password": ["Password must match"]})
+            raise serializers.ValidationError(
+                {"password": ["Password must match"]}
+            )
         return data
 
 

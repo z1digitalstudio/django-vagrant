@@ -10,9 +10,17 @@ from users.rest_views import (
 
 
 urlpatterns = [
-    path("login/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("password/", ChangePasswordRestView.as_view(), name="change_password"),
-    path("reset-password/", ResetPasswordRestView.as_view(), name="reset_password"),
+    path(
+        "login/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"
+    ),
+    path(
+        "password/", ChangePasswordRestView.as_view(), name="change_password"
+    ),
+    path(
+        "reset-password/",
+        ResetPasswordRestView.as_view(),
+        name="reset_password",
+    ),
     path(
         "confirm-password/<str:token>/",
         ConfirmResetPasswordView.as_view(),
