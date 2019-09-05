@@ -12,13 +12,18 @@ from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from users.models import User
-from users.serializers import (UserProfileSerializer, ChangePasswordSerializer,
-                               CustomTokenObtainPairView, EmailField,
-                               ResetPasswordSerializer)
+from users.serializers import (
+    UserProfileSerializer,
+    ChangePasswordSerializer,
+    CustomTokenObtainPairView,
+    EmailField,
+    ResetPasswordSerializer,
+)
 
 
 class UserListRestView(api_views.ListCreateAPIView):
     """Return a list of Users"""
+
     permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
@@ -26,13 +31,15 @@ class UserListRestView(api_views.ListCreateAPIView):
 
 class UserRetrieveUpdateRestView(api_views.RetrieveUpdateAPIView):
     """Return an specific user"""
-    permission_classes = (permissions.IsAuthenticated, )
+
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
 
 
 class UserMeRetrieveRestView(api_views.RetrieveUpdateAPIView):
     """Return logged user"""
+
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = UserProfileSerializer
 
@@ -42,6 +49,7 @@ class UserMeRetrieveRestView(api_views.RetrieveUpdateAPIView):
 
 class ChangePasswordRestView(api_views.UpdateAPIView):
     """Change logged user's password"""
+
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = ChangePasswordSerializer
     model = User
@@ -56,7 +64,10 @@ class ChangePasswordRestView(api_views.UpdateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             if not self.object.check_password(serializer.data.get("old_password")):
-                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"old_password": ["Wrong password."]},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             self.object.set_password(serializer.data.get("new_password"))
             self.object.save()
             return Response("Success.", status=status.HTTP_200_OK)
@@ -66,6 +77,7 @@ class ChangePasswordRestView(api_views.UpdateAPIView):
 
 class ResetPasswordRestView(api_views.GenericAPIView):
     """Send an email for reseting the password"""
+
     serializer_class = EmailField
 
     def post(self, request, *args, **kwargs):
@@ -93,11 +105,7 @@ class ResetPasswordRestView(api_views.GenericAPIView):
             print(message)
             try:
                 send_mail(
-                    subject,
-                    message,
-                    "z1@z1.digital",
-                    [email],
-                    fail_silently=False,
+                    subject, message, "z1@z1.digital", [email], fail_silently=False
                 )
             except BadHeaderError:
                 return HttpResponse("Invalid header found.")
@@ -109,6 +117,7 @@ class ResetPasswordRestView(api_views.GenericAPIView):
 
 class ConfirmResetPasswordView(api_views.UpdateAPIView):
     """Change the password of the user using the token provided in the url of the email to reset the password"""
+
     serializer_class = ResetPasswordSerializer
     queryset = User.objects.all()
     decoded_token = None
@@ -127,12 +136,14 @@ class ConfirmResetPasswordView(api_views.UpdateAPIView):
     def perform_update(self, serializer):
         user = self.get_object()
         serializer.is_valid()
-        user.set_password(serializer.validated_data['password'])
+        user.set_password(serializer.validated_data["password"])
         user.save()
 
     def check_permission(self, request):
         try:
-            self.decoded_token = jwt.decode(self.kwargs.get("token"), "secret", algorithms=["HS256"])
+            self.decoded_token = jwt.decode(
+                self.kwargs.get("token"), "secret", algorithms=["HS256"]
+            )
         except jwt.ExpiredSignatureError:
             raise self.permission_denied(request, "The token has expired")
         except jwt.InvalidTokenError:

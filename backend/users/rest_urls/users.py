@@ -1,7 +1,10 @@
 from django.urls import path
 
-from users.rest_views import (UserListRestView, UserMeRetrieveRestView,
-                              UserRetrieveUpdateRestView)
+from users.rest_views import (
+    UserListRestView,
+    UserMeRetrieveRestView,
+    UserRetrieveUpdateRestView,
+)
 
 urlpatterns = [
     path("", UserListRestView.as_view(), name="list_users"),
