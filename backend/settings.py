@@ -32,6 +32,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("ENV", "dev") == "dev"
+USE_S3 = os.getenv("USE_S3") == "TRUE"
 
 ALLOWED_HOSTS = (
     os.getenv("ALLOWED_HOSTS").split(":")
@@ -58,6 +59,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
+    "storages",
+    "media_upload",
 ]
 
 MIDDLEWARE = [
@@ -201,3 +204,51 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "../media")
 CELERY_TIMEZONE = "US/Eastern"
 CELERYD_TASK_TIME_LIMIT = 700
 CELERYBEAT_SCHEDULE = {}
+
+# storages
+UPLOAD_TOKEN_EXPIRE_TIME = os.getenv("UPLOAD_TOKEN_EXPIRE_TIME")
+
+
+MEDIA_UPLOAD_BACKEND = os.getenv(
+    "MEDIA_UPLOAD_BACKEND",
+    "media_upload.backends.local.LocalMediaUploadBackend",
+)
+
+if USE_S3:
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
+    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME")
+    AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
+    AWS_DEFAULT_ACL = "public-read"
+    AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
+    # s3 static settings
+    AWS_LOCATION = "static"
+    STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+    STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+    # s3 public media settings
+    PUBLIC_MEDIA_LOCATION = "media"
+    MEDIA_URL = "https://%s/%s/" % (
+        AWS_S3_CUSTOM_DOMAIN,
+        PUBLIC_MEDIA_LOCATION,
+    )
+    DEFAULT_FILE_STORAGE = "storage_backends.PublicMediaStorage"
+
+    # s3 private media settings
+    PRIVATE_MEDIA_LOCATION = "private"
+    PRIVATE_FILE_STORAGE = "storage_backends.PrivateMediaStorage"
+
+else:
+    # Static files (CSS, JavaScript, Images)
+    # https://docs.djangoproject.com/en/2.2/howto/static-files/
+
+    STATIC_URL = "/static/"
+    STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "../media")
+
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
+FEEDBACK_EXPIRATION_TIME = 9 * 3600  # 9 horas
