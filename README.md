@@ -4,20 +4,20 @@
 
  * VirtualBox  (https://www.virtualbox.org/wiki/Downloads)
  * Vagrant (https://www.vagrantup.com/downloads.html
- 
+
  ## Installation
 
     $ git clone https://github.com/z1digitalstudio/django-vagrant
     $ cd django-vagrant
     $ vagrant up --provision
- 
+
  ## Development
  ### Create user
      $ vagrant ssh
      $ python manage.py createsuperuser
  ### Create database tables
      $ python manage.py migrate
- ### Start up 
+ ### Start up
     $ ./run.sh
 
 ## Access from the browser

@@ -1,1 +1,4 @@
 -r common.txt
+#Pre-commit
+pre-commit==1.18.3
+black==19.3b0
