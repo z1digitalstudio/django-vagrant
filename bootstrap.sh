@@ -26,19 +26,19 @@ sudo apt-get -y install python3-pip
     # curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
     # echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 
-# Postgresql 9.4
+# Postgresql 12
 
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
 sudo apt install wget ca-certificates
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add
 sudo apt update
-sudo apt-get -y install postgresql-9.4 postgresql-server-dev-9.4 pgadmin3 python-psycopg2
+sudo apt-get -y install postgresql-12 postgresql-server-dev-12 pgadmin3 python-psycopg2
 
-echo "local all postgres peer" > /etc/postgresql/9.4/main/pg_hba.conf
-echo "local django_db django md5" >> /etc/postgresql/9.4/main/pg_hba.conf
-echo "local all all peer" >> /etc/postgresql/9.4/main/pg_hba.conf
-echo "host all all 127.0.0.1/32 md5" >> /etc/postgresql/9.4/main/pg_hba.conf
-echo "host all all ::1/128 md5" >> /etc/postgresql/9.4/main/pg_hba.conf
+echo "local all postgres peer" > /etc/postgresql/12/main/pg_hba.conf
+echo "local django_db django md5" >> /etc/postgresql/12/main/pg_hba.conf
+echo "local all all peer" >> /etc/postgresql/12/main/pg_hba.conf
+echo "host all all 127.0.0.1/32 md5" >> /etc/postgresql/12/main/pg_hba.conf
+echo "host all all ::1/128 md5" >> /etc/postgresql/12/main/pg_hba.conf
 
 service postgresql restart
 
